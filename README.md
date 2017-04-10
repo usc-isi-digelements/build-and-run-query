@@ -1,4 +1,4 @@
-# html-text
+# build-and-run-query
 
 A Polymer Element that builds and runs an elasticsearch query.
 
