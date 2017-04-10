@@ -1,0 +1,276 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../elastic-client-query-builder/elastic-client-query-builder.html">
+<link rel="import" href="../elastic-client-search/elastic-client-search.html">
+
+<!--
+A Polymer Element that builds and runs an elasticsearch query.
+
+### Example
+```html
+<build-and-run-query
+  client="[[client]]"
+  fields='"myField"'
+  values='"myValue"'
+  index-name="myIndexName"
+  index-types='["myIndexType"]'
+  error="{{error}}"
+  loading="{{loading}}"
+  results="{{results}}">
+</build-and-run-query>
+```
+
+@demo demo/index.html
+-->
+
+<dom-module id="build-and-run-query">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <elastic-client-query-builder
+      type="[[type]]"
+      fields="[[fields]]"
+      values="[[values]]"
+      ejs-query="{{_query}}">
+    </elastic-client-query-builder>
+
+    <elastic-client-search id="runner"
+      client="[[client]]"
+      index="[[indexName]]"
+      elastic-types="[[indexTypes]]"
+      aggregations="[[aggregations]]"
+      filters="[[filters]]"
+      page-size="[[pageSize]]"
+      query="[[_query]]"
+      sort-field="[[sortField]]"
+      sort-order="[[sortOrder]]"
+      results="{{results}}"
+      loading="{{loading}}"
+      last-error="{{error}}">
+    </elastic-client-search>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'build-and-run-query',
+
+      properties: {
+        /**
+         * (Optional)
+         *
+         * The array of elasticsearch aggregation objects for the query.
+         *
+         * @type {Array}
+         * @default []
+         */
+        aggregations: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+
+        /**
+         * (Required)
+         *
+         * The elasticsearch client object.
+         *
+         * @type {Object}
+         */
+        client: {
+          type: Object
+        },
+
+        /**
+         * (Output)
+         *
+         * The elasticsearch error.
+         *
+         * @type {Object}
+         */
+        error: {
+          notify: true,
+          type: Object
+        },
+
+        /**
+         * (Required)
+         *
+         * The string or array query fields.
+         *
+         * @type {Array}
+         */
+        fields: {
+          type: Array
+        },
+
+        /**
+         * (Optional)
+         *
+         * The array of elasticsearch filter objects for the query.
+         *
+         * @type {Array}
+         * @default []
+         */
+        filters: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+
+        /**
+         * (Required)
+         *
+         * The elasticsearch index name.
+         *
+         * @type {String}
+         */
+        indexName: {
+          type: String
+        },
+
+        /**
+         * (Required)
+         *
+         * The array of elasticsearch index types.
+         *
+         * @type {Array}
+         */
+        indexTypes: {
+          type: Array
+        },
+
+        /**
+         * (Output)
+         *
+         * Whether the elasticsearch query is running.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        loading: {
+          notify: true,
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * (Optional)
+         *
+         * The page size of the elasticsearch query.
+         *
+         * @type {Number}
+         * @default 1
+         */
+        pageSize: {
+          type: Number,
+          value: 1
+        },
+
+        /**
+         * (Output)
+         *
+         * The elasticsearch results.
+         *
+         * @type {Object}
+         */
+        results: {
+          notify: true,
+          type: Object
+        },
+
+        /**
+         * (Optional)
+         *
+         * The sort field of the elasticsearch query.
+         *
+         * @type {String}
+         * @default ''
+         */
+        sortField: {
+          type: String,
+          value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * The sort order of the elasticsearch query.
+         *
+         * @type {String}
+         * @default 'desc'
+         */
+        sortOrder: {
+          type: String,
+          value: 'desc'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The query type.
+         *
+         * @type {String}
+         * @default 'term'
+         */
+        type: {
+          type: String,
+          value: 'term'
+        },
+
+        /**
+         * (Required)
+         *
+         * The string or array query values.
+         *
+         * @type {Array}
+         */
+        values: {
+          type: Array
+        },
+
+        /**
+         * The elasticsearch query object.
+         *
+         * @type {Object}
+         * @private
+         */
+        _query: {
+          type: Object
+        }
+      },
+
+      /**
+       * Resets the results and runs the query.
+       */
+      runQuery: function() {
+        this.results = undefined;
+        this.$$('#runner').search();
+      }
+    });
+  })();
+  </script>
+</dom-module>
