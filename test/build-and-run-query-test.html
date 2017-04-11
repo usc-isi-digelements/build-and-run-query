@@ -21,6 +21,7 @@ limitations under the License.
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../build-and-run-query.html">
+  <link rel="import" href="../bower_components/elasticjs-import/elasticjs.html">
 </head>
 
 <body>
@@ -42,19 +43,22 @@ limitations under the License.
         element.values = 'myValue';
       });
 
-      test('properties are set to default values', function() {
+      test('default properties are set to correct values', function() {
         expect(element.aggregations).to.deep.equal([]);
+        expect(element.error).to.not.exist;
         expect(element.filters).to.deep.equal([]);
         expect(element.loading).to.be.false;
         expect(element.pageSize).to.equal(1);
+        expect(element.raw).to.be.false;
+        expect(element.results).to.not.exist;
         expect(element.sortField).to.equal('');
         expect(element.sortOrder).to.equal('desc');
+        expect(element.transformConfig).to.deep.equal({});
+        expect(element.transformFunction).to.not.exist;
         expect(element.type).to.equal('term');
-        expect(element.error).to.not.exist;
-        expect(element.results).to.not.exist;
       });
 
-      test('properties are set to input values', function() {
+      test('input properties are set to correct values', function() {
         expect(element.fields).to.equal('myField');
         expect(element.indexName).to.equal('myIndexName');
         expect(element.indexTypes).to.deep.equal(['myIndexType']);
@@ -63,14 +67,121 @@ limitations under the License.
 
       test('_query is built correctly', function() {
         expect(element._query).to.exist;
+        expect(element._query.toJSON()).to.deep.equal(ejs.TermQuery('myField', 'myValue').toJSON());
       });
 
       test('does have elastic-client-query-builder element', function() {
         expect(element.$$('elastic-client-query-builder')).to.exist;
+        expect(element.$$('elastic-client-query-builder').type).to.equal('term');
+        expect(element.$$('elastic-client-query-builder').fields).to.equal('myField');
+        expect(element.$$('elastic-client-query-builder').values).to.equal('myValue');
       });
 
       test('does have elastic-client-search element', function() {
         expect(element.$$('elastic-client-search')).to.exist;
+        expect(element.$$('elastic-client-search').index).to.equal('myIndexName');
+        expect(element.$$('elastic-client-search').elasticTypes).to.deep.equal(['myIndexType']);
+        expect(element.$$('elastic-client-search').aggregations).to.deep.equal([]);
+        expect(element.$$('elastic-client-search').filters).to.deep.equal([]);
+        expect(element.$$('elastic-client-search').pageSize).to.equal(1);
+        expect(element.$$('elastic-client-search').query).to.exist;
+        expect(element.$$('elastic-client-search').sortField).to.equal('');
+        expect(element.$$('elastic-client-search').sortOrder).to.equal('desc');
+      });
+
+      test('setting _results does update total but does not update results', function(done) {
+        element._results = {
+          hits: {
+            hits: [],
+            total: 5
+          }
+        };
+
+        flush(function() {
+          expect(element.results).to.not.exist;
+          expect(element.total).to.equal(5);
+          done();
+        });
+      });
+
+      test('transformFunction is passed _results and transformConfig', function(done) {
+        element.transformConfig = {
+          config: 'config'
+        };
+
+        element.transformFunction = function(data, config) {
+          expect(data).to.deep.equal({
+            hits: {
+              hits: [{
+                key: 'value'
+              }],
+              total: 1
+            }
+          });
+
+          expect(config).to.deep.equal({
+            config: 'config'
+          });
+
+          done();
+        };
+
+        element._results = {
+          hits: {
+            hits: [{
+              key: 'value'
+            }],
+            total: 1
+          }
+        };
+      });
+
+      test('setting transformFunction and _results does update results', function(done) {
+        element.transformFunction = function(data) {
+          return data.hits.hits;
+        };
+
+        element._results = {
+          hits: {
+            hits: [{
+              key: 'value'
+            }],
+            total: 1
+          }
+        };
+
+        flush(function() {
+          expect(element.results).to.deep.equal([{
+            key: 'value'
+          }]);
+          expect(element.total).to.equal(1);
+          done();
+        });
+      });
+
+      test('setting raw=true and _results does update results', function(done) {
+        element.raw = true;
+        element._results = {
+          hits: {
+            hits: [{
+              key: 'value'
+            }],
+            total: 1
+          }
+        };
+
+        flush(function() {
+          expect(element.results).to.deep.equal({
+            hits: {
+              hits: [{
+                key: 'value'
+              }],
+              total: 1
+            }
+          });
+          expect(element.total).to.equal(1);
+          done();
+        });
       });
 
       test('does have runQuery function', function() {

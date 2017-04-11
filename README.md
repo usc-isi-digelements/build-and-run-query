@@ -1,13 +1,32 @@
 # build-and-run-query
 
-A Polymer Element that builds and runs an elasticsearch query.
+A Polymer Element that builds and runs an elasticsearch query and returns the transformed results.
 
 ### Example
 ```html
 <build-and-run-query
-  client="[[client]]"
   fields='"myField"'
   values='"myValue"'
+  client="[[client]]"
+  index-name="myIndexName"
+  index-types='["myIndexType"]'
+  transform-function="[[myFunction]]"
+  error="{{error}}"
+  loading="{{loading}}"
+  results="{{results}}">
+</build-and-run-query>
+```
+
+### Raw Elasticsearch Results
+
+To return the raw elasticsearch results rather than the results of the transform function, set the "raw" property.
+
+```html
+<build-and-run-query
+  raw
+  fields='"myField"'
+  values='"myValue"'
+  client="[[client]]"
   index-name="myIndexName"
   index-types='["myIndexType"]'
   error="{{error}}"

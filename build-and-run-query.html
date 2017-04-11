@@ -17,18 +17,20 @@ limitations under the License.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../elastic-client-query-builder/elastic-client-query-builder.html">
 <link rel="import" href="../elastic-client-search/elastic-client-search.html">
+<link rel="import" href="../json-combine/json-combine.html">
 
 <!--
-A Polymer Element that builds and runs an elasticsearch query.
+A Polymer Element that builds and runs an elasticsearch query and returns the transformed results.
 
 ### Example
 ```html
 <build-and-run-query
-  client="[[client]]"
   fields='"myField"'
   values='"myValue"'
+  client="[[client]]"
   index-name="myIndexName"
   index-types='["myIndexType"]'
+  transform-function="[[myFunction]]"
   error="{{error}}"
   loading="{{loading}}"
   results="{{results}}">
@@ -63,10 +65,35 @@ A Polymer Element that builds and runs an elasticsearch query.
       query="[[_query]]"
       sort-field="[[sortField]]"
       sort-order="[[sortOrder]]"
-      results="{{results}}"
+      results="{{_results}}"
       loading="{{loading}}"
       last-error="{{error}}">
     </elastic-client-search>
+
+    <json-combine
+      data-in1="[[_results]]"
+      data-in2="{}"
+      data-out="{{total}}"
+      combine-function="[[_createTotalTransformFunction()]]">
+    </json-combine>
+
+    <template is="dom-if" if="[[raw]]">
+      <json-combine
+        data-in1="[[_results]]"
+        data-in2="{}"
+        data-out="{{results}}"
+        combine-function="[[_createResultsTransformFunction()]]">
+      </json-combine>
+    </template>
+
+    <template is="dom-if" if="[[!raw]]">
+      <json-combine
+        data-in1="[[_results]]"
+        data-in2="[[transformConfig]]"
+        data-out="{{results}}"
+        combine-function="[[transformFunction]]">
+      </json-combine>
+    </template>
   </template>
 
   <script>
@@ -191,9 +218,22 @@ A Polymer Element that builds and runs an elasticsearch query.
         },
 
         /**
+         * (Optional)
+         *
+         * Whether to return the raw elasticsearch results rather than the elasticsearch results passed through the transformFunction.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        raw: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
          * (Output)
          *
-         * The elasticsearch results.
+         * The elasticsearch results passed through the transformFunction (or the raw elasticsearch results if raw is true).
          *
          * @type {Object}
          */
@@ -231,6 +271,32 @@ A Polymer Element that builds and runs an elasticsearch query.
         /**
          * (Optional)
          *
+         * The config passed with the elasticsearch results to the transformFunction.
+         *
+         * @type {Object}
+         * @default {}
+         */
+        transformConfig: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+
+        /**
+         * (Optional)
+         *
+         * The function to transform the elasticsearch results into the output results.  Required if raw is false.
+         *
+         * @type {Function}
+         */
+        transformFunction: {
+          type: Function
+        },
+
+        /**
+         * (Optional)
+         *
          * The query type.
          *
          * @type {String}
@@ -260,7 +326,29 @@ A Polymer Element that builds and runs an elasticsearch query.
          */
         _query: {
           type: Object
+        },
+
+        /**
+         * The elasticsearch query results.
+         *
+         * @type {Object}
+         * @private
+         */
+        _results: {
+          type: Object
         }
+      },
+
+      _createResultsTransformFunction: function() {
+        return function(data) {
+          return data;
+        };
+      },
+
+      _createTotalTransformFunction: function() {
+        return function(data) {
+          return data && data.hits && data.hits.total ? data.hits.total : 0;
+        };
       },
 
       /**
