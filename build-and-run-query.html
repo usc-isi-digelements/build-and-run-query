@@ -269,6 +269,18 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         },
 
         /**
+         * (Output)
+         *
+         * The total count of hits in the elasticsearch query results.
+         *
+         * @type {Number}
+         */
+        total: {
+          notify: true,
+          type: Number
+        },
+
+        /**
          * (Optional)
          *
          * The config passed with the elasticsearch results to the transformFunction.
