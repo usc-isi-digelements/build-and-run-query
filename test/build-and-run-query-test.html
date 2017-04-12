@@ -48,6 +48,7 @@ limitations under the License.
         expect(element.error).to.not.exist;
         expect(element.filters).to.not.exist;
         expect(element.loading).to.be.false;
+        expect(element.page).to.equal(1);
         expect(element.pageSize).to.equal(1);
         expect(element.propertiesReady).to.be.true;
         expect(element.raw).to.be.false;
@@ -83,6 +84,7 @@ limitations under the License.
         expect(element.$$('elastic-client-search')).to.exist;
         expect(element.$$('elastic-client-search').index).to.equal('myIndexName');
         expect(element.$$('elastic-client-search').elasticTypes).to.deep.equal(['myIndexType']);
+        expect(element.$$('elastic-client-search').page).to.equal(1);
         expect(element.$$('elastic-client-search').pageSize).to.equal(1);
         expect(element.$$('elastic-client-search').propertiesReady).to.be.true;
         expect(element.$$('elastic-client-search').query).to.exist;

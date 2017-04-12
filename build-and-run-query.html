@@ -63,6 +63,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       elastic-types="[[indexTypes]]"
       aggregations="[[aggregations]]"
       filters="[[filters]]"
+      page="{{page}}"
       page-size="[[pageSize]]"
       properties-ready="[[propertiesReady]]"
       query="[[_query]]"
@@ -198,6 +199,19 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
           notify: true,
           type: Boolean,
           value: false
+        },
+
+        /**
+         * (Optional|Output)
+         *
+         * The page of the elasticsearch query.
+         *
+         * @type {Number}
+         * @default 1
+         */
+        page: {
+          type: Number,
+          value: 1
         },
 
         /**
