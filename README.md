@@ -31,6 +31,8 @@ To return the raw elasticsearch results rather than the results of the transform
   client="[[client]]"
   index-name="myIndexName"
   index-types='["myIndexType"]'
+  aggregations="[]"
+  filters="[]"
   error="{{error}}"
   loading="{{loading}}"
   results="{{results}}">
