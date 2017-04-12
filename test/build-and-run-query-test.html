@@ -44,9 +44,9 @@ limitations under the License.
       });
 
       test('default properties are set to correct values', function() {
-        expect(element.aggregations).to.deep.equal([]);
+        expect(element.aggregations).to.not.exist;
         expect(element.error).to.not.exist;
-        expect(element.filters).to.deep.equal([]);
+        expect(element.filters).to.not.exist;
         expect(element.loading).to.be.false;
         expect(element.pageSize).to.equal(1);
         expect(element.raw).to.be.false;
@@ -81,8 +81,6 @@ limitations under the License.
         expect(element.$$('elastic-client-search')).to.exist;
         expect(element.$$('elastic-client-search').index).to.equal('myIndexName');
         expect(element.$$('elastic-client-search').elasticTypes).to.deep.equal(['myIndexType']);
-        expect(element.$$('elastic-client-search').aggregations).to.deep.equal([]);
-        expect(element.$$('elastic-client-search').filters).to.deep.equal([]);
         expect(element.$$('elastic-client-search').pageSize).to.equal(1);
         expect(element.$$('elastic-client-search').query).to.exist;
         expect(element.$$('elastic-client-search').sortField).to.equal('');

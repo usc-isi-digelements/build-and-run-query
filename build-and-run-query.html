@@ -30,6 +30,8 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
   client="[[client]]"
   index-name="myIndexName"
   index-types='["myIndexType"]'
+  aggregations="[]"
+  filters="[]"
   transform-function="[[myFunction]]"
   error="{{error}}"
   loading="{{loading}}"
@@ -105,18 +107,14 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
 
       properties: {
         /**
-         * (Optional)
+         * (Required)
          *
          * The array of elasticsearch aggregation objects for the query.
          *
          * @type {Array}
-         * @default []
          */
         aggregations: {
-          type: Array,
-          value: function() {
-            return [];
-          }
+          type: Array
         },
 
         /**
@@ -154,18 +152,14 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         },
 
         /**
-         * (Optional)
+         * (Required)
          *
          * The array of elasticsearch filter objects for the query.
          *
          * @type {Array}
-         * @default []
          */
         filters: {
-          type: Array,
-          value: function() {
-            return [];
-          }
+          type: Array
         },
 
         /**

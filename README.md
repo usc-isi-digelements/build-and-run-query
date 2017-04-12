@@ -10,6 +10,8 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
   client="[[client]]"
   index-name="myIndexName"
   index-types='["myIndexType"]'
+  aggregations="[]"
+  filters="[]"
   transform-function="[[myFunction]]"
   error="{{error}}"
   loading="{{loading}}"
