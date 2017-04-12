@@ -56,6 +56,7 @@ limitations under the License.
         expect(element.sortField).to.equal('');
         expect(element.sortOrder).to.equal('desc');
         expect(element.sourceInclude).to.deep.equal([]);
+        expect(element.total).to.not.exist;
         expect(element.transformConfig).to.deep.equal({});
         expect(element.transformFunction).to.not.exist;
         expect(element.type).to.equal('term');

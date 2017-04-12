@@ -397,7 +397,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
 
       _createTotalTransformFunction: function() {
         return function(data) {
-          return data && data.hits && data.hits.total ? data.hits.total : 0;
+          return data && data.hits && data.hits.total ? data.hits.total : undefined;
         };
       },
 
