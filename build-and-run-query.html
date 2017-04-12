@@ -64,9 +64,11 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       aggregations="[[aggregations]]"
       filters="[[filters]]"
       page-size="[[pageSize]]"
+      properties-ready="[[propertiesReady]]"
       query="[[_query]]"
       sort-field="[[sortField]]"
       sort-order="[[sortOrder]]"
+      source-include="[[sourceInclude]]"
       results="{{_results}}"
       loading="{{loading}}"
       last-error="{{error}}">
@@ -214,6 +216,19 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         /**
          * (Optional)
          *
+         * Whether the elasticsearch query is ready to be run.  False forbids the query to be run at all.
+         *
+         * @type {Boolean}
+         * @default true
+         */
+        propertiesReady: {
+          type: Boolean,
+          value: true
+        },
+
+        /**
+         * (Optional)
+         *
          * Whether to return the raw elasticsearch results rather than the elasticsearch results passed through the transformFunction.
          *
          * @type {Boolean}
@@ -260,6 +275,21 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         sortOrder: {
           type: String,
           value: 'desc'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The array of string _source fields to include in the elasticsearch results.
+         *
+         * @type {Array}
+         * @default []
+         */
+        sourceInclude: {
+          type: Array,
+          value: function() {
+            return [];
+          }
         },
 
         /**

@@ -49,10 +49,12 @@ limitations under the License.
         expect(element.filters).to.not.exist;
         expect(element.loading).to.be.false;
         expect(element.pageSize).to.equal(1);
+        expect(element.propertiesReady).to.be.true;
         expect(element.raw).to.be.false;
         expect(element.results).to.not.exist;
         expect(element.sortField).to.equal('');
         expect(element.sortOrder).to.equal('desc');
+        expect(element.sourceInclude).to.deep.equal([]);
         expect(element.transformConfig).to.deep.equal({});
         expect(element.transformFunction).to.not.exist;
         expect(element.type).to.equal('term');
@@ -82,9 +84,11 @@ limitations under the License.
         expect(element.$$('elastic-client-search').index).to.equal('myIndexName');
         expect(element.$$('elastic-client-search').elasticTypes).to.deep.equal(['myIndexType']);
         expect(element.$$('elastic-client-search').pageSize).to.equal(1);
+        expect(element.$$('elastic-client-search').propertiesReady).to.be.true;
         expect(element.$$('elastic-client-search').query).to.exist;
         expect(element.$$('elastic-client-search').sortField).to.equal('');
         expect(element.$$('elastic-client-search').sortOrder).to.equal('desc');
+        expect(element.$$('elastic-client-search').sourceInclude).to.deep.equal([]);
       });
 
       test('setting _results does update total but does not update results', function(done) {
