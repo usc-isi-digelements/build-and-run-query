@@ -54,7 +54,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       type="[[type]]"
       fields="[[fields]]"
       values="[[values]]"
-      ejs-query="{{_query}}">
+      ejs-query="{{query}}">
     </elastic-client-query-builder>
 
     <elastic-client-search id="runner"
@@ -66,7 +66,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       page="{{page}}"
       page-size="[[pageSize]]"
       properties-ready="[[propertiesReady]]"
-      query="[[_query]]"
+      query="[[query]]"
       sort-field="[[sortField]]"
       sort-order="[[sortOrder]]"
       source-include="[[sourceInclude]]"
@@ -369,12 +369,14 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         },
 
         /**
-         * The elasticsearch query object.
+         * (Optional|Output)
+         *
+         * The elasticsearch query object.  Can be set instead of "fields", "type", and "values".
          *
          * @type {Object}
          * @private
          */
-        _query: {
+        query: {
           type: Object
         },
 

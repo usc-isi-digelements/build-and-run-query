@@ -69,9 +69,9 @@ limitations under the License.
         expect(element.values).to.equal('myValue');
       });
 
-      test('_query is built correctly', function() {
-        expect(element._query).to.exist;
-        expect(element._query.toJSON()).to.deep.equal(ejs.TermQuery('myField', 'myValue').toJSON());
+      test('query is built correctly', function() {
+        expect(element.query).to.exist;
+        expect(element.query.toJSON()).to.deep.equal(ejs.TermQuery('myField', 'myValue').toJSON());
       });
 
       test('does have elastic-client-query-builder element', function() {
