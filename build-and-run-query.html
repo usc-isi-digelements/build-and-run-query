@@ -146,7 +146,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         /**
          * (Required)
          *
-         * The string or array query fields.
+         * The string or array query fields.  Not required if `query` is set.
          *
          * @type {Array}
          */
@@ -238,6 +238,18 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         propertiesReady: {
           type: Boolean,
           value: true
+        },
+
+        /**
+         * (Optional|Output)
+         *
+         * The elasticsearch query object.  Can be set instead of `fields`, `type`, and `values`.
+         *
+         * @type {Object}
+         */
+        query: {
+          notify: true,
+          type: Object
         },
 
         /**
@@ -336,7 +348,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         /**
          * (Optional)
          *
-         * The function to transform the elasticsearch results into the output results.  Required if raw is false.
+         * The function to transform the elasticsearch results into the output results.  Required if `raw` is false.
          *
          * @type {Function}
          */
@@ -360,24 +372,12 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
         /**
          * (Required)
          *
-         * The string or array query values.
+         * The string or array query values.  Not required if `query` is set.
          *
          * @type {Array}
          */
         values: {
           type: Array
-        },
-
-        /**
-         * (Optional|Output)
-         *
-         * The elasticsearch query object.  Can be set instead of "fields", "type", and "values".
-         *
-         * @type {Object}
-         * @private
-         */
-        query: {
-          type: Object
         },
 
         /**
