@@ -70,6 +70,7 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       sort-field="[[sortField]]"
       sort-order="[[sortOrder]]"
       source-include="[[sourceInclude]]"
+      source-exclude="[[sourceExclude]]"
       results="{{_results}}"
       loading="{{loading}}"
       last-error="{{error}}">
@@ -312,6 +313,21 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
          * @default []
          */
         sourceInclude: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+
+        /**
+         * (Optional)
+         *
+         * The array of string _source fields to exclude from the elasticsearch results.
+         *
+         * @type {Array}
+         * @default []
+         */
+        sourceExclude: {
           type: Array,
           value: function() {
             return [];
