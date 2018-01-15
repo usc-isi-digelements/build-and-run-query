@@ -31,7 +31,6 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
   index-name="myIndexName"
   index-types='["myIndexType"]'
   aggregations="[]"
-  filters="[]"
   transform-function="[[myFunction]]"
   error="{{error}}"
   loading="{{loading}}"
@@ -50,19 +49,22 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
       }
     </style>
 
-    <elastic-client-query-builder
-      type="[[type]]"
-      fields="[[fields]]"
-      values="[[values]]"
-      ejs-query="{{query}}">
-    </elastic-client-query-builder>
+    <template is="dom-if" if="[[fields]]">
+      <template is="dom-if" if="[[values]]">
+        <elastic-client-query-builder
+          type="[[type]]"
+          fields="[[fields]]"
+          values="[[values]]"
+          ejs-query="{{query}}">
+        </elastic-client-query-builder>
+      </template>
+    </template>
 
     <elastic-client-search id="runner"
       client="[[client]]"
       index="[[indexName]]"
       elastic-types="[[indexTypes]]"
       aggregations="[[aggregations]]"
-      filters="[[filters]]"
       page="{{page}}"
       page-size="[[pageSize]]"
       properties-ready="[[propertiesReady]]"
@@ -152,17 +154,6 @@ A Polymer Element that builds and runs an elasticsearch query and returns the tr
          * @type {Array}
          */
         fields: {
-          type: Array
-        },
-
-        /**
-         * (Required)
-         *
-         * The array of elasticsearch filter objects for the query.
-         *
-         * @type {Array}
-         */
-        filters: {
           type: Array
         },
 

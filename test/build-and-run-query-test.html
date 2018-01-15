@@ -35,18 +35,18 @@ limitations under the License.
     suite('build-and-run-query tests', function() {
       var element;
 
-      setup(function() {
+      setup(function(done) {
         element = fixture('build-and-run-query-fixture');
         element.fields = 'myField';
         element.indexName = 'myIndexName';
         element.indexTypes = ['myIndexType'];
         element.values = 'myValue';
+        flush(done);
       });
 
       test('default properties are set to correct values', function() {
         expect(element.aggregations).to.not.exist;
         expect(element.error).to.not.exist;
-        expect(element.filters).to.not.exist;
         expect(element.loading).to.be.false;
         expect(element.page).to.equal(1);
         expect(element.pageSize).to.equal(1);
@@ -116,6 +116,15 @@ limitations under the License.
           config: 'config'
         };
 
+        element._results = {
+          hits: {
+            hits: [{
+              key: 'value'
+            }],
+            total: 1
+          }
+        };
+
         element.transformFunction = function(data, config) {
           expect(data).to.deep.equal({
             hits: {
@@ -132,22 +141,9 @@ limitations under the License.
 
           done();
         };
-
-        element._results = {
-          hits: {
-            hits: [{
-              key: 'value'
-            }],
-            total: 1
-          }
-        };
       });
 
       test('setting transformFunction and _results does update results', function(done) {
-        element.transformFunction = function(data) {
-          return data.hits.hits;
-        };
-
         element._results = {
           hits: {
             hits: [{
@@ -155,6 +151,10 @@ limitations under the License.
             }],
             total: 1
           }
+        };
+
+        element.transformFunction = function(data) {
+          return data.hits.hits;
         };
 
         flush(function() {
