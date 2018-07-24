@@ -16,9 +16,9 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.2",
-    "elastic-client-query-builder": "usc-isi-digelements/elastic-client-query-builder#2.1.2",
-    "elastic-client-search": "usc-isi-digelements/elastic-client-search#2.4.0",
-    "json-combine": "usc-isi-digelements/json-combine#2.1.1"
+    "elastic-client-query-builder": "usc-isi-digelements/elastic-client-query-builder#^2.1.2",
+    "elastic-client-search": "usc-isi-digelements/elastic-client-search#^2.4.0",
+    "json-combine": "usc-isi-digelements/json-combine#^2.1.1"
   },
   "devDependencies": {
     "elasticjs-import": "usc-isi-digelements/elasticjs-import#~1.0.0",
